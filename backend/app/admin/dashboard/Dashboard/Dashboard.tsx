@@ -1,7 +1,8 @@
 
-import './Barchart.module.css';
+import '../Barchart.module.css';
+import './dashboard.css';
 import StatsCard from '../StatsCard/StatsCard';
-import BarChart from '../Barchart/Barchart';
+import Barchart from '../Barchart/Barchart';
 import DonutChart from '../DonutChart/DonutChart';
 import RecentActivity from '../RecentAction/RecentAction';
 import ProgressSection from '../ProgressSection/ProgressSection';
