@@ -1,0 +1,241 @@
+/* ===== STAT CARDS ===== */
+.stat-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+  min-height: 140px;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+}
+
+.stat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.stat-card-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #8b8fa8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.stat-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.stat-card-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1e1e2f;
+  margin-bottom: 10px;
+  line-height: 1;
+}
+
+.stat-card-change {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.change-positive {
+  color: #10b981;
+}
+
+.change-negative {
+  color: #ef4444;
+}
+
+.change-text {
+  color: #8b8fa8;
+  font-weight: 400;
+}
+
+.stat-card-bg-shape {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  opacity: 0.05;
+}
+
+/* ===== ACTIVITY CARD ===== */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid #f0f0f7;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e1e2f;
+}
+
+.card-action {
+  font-size: 0.85rem;
+  color: #7c3aed;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.card-action:hover {
+  text-decoration: underline;
+}
+
+.card-body {
+  padding: 20px 28px 24px;
+}
+
+/* ===== ACTIVITY LIST ===== */
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f5f5fa;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-dot {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.activity-info {
+  flex: 1;
+}
+
+.activity-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e1e2f;
+  margin-bottom: 4px;
+}
+
+.activity-desc {
+  font-size: 0.85rem;
+  color: #8b8fa8;
+}
+
+.activity-time {
+  font-size: 0.78rem;
+  color: #b0b3c8;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ===== QUICK ACTIONS ===== */
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.quick-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e1e2f;
+}
+
+.quick-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.quick-action-icon {
+  font-size: 1.6rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .stat-card {
+    padding: 24px 28px;
+    min-height: 130px;
+  }
+  .stat-card-value {
+    font-size: 2rem;
+  }
+  .card-body {
+    padding: 18px 24px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stat-card {
+    padding: 20px 22px;
+    min-height: 120px;
+  }
+  .stat-card-value {
+    font-size: 1.8rem;
+  }
+  .card-header {
+    padding: 20px 20px 14px;
+  }
+  .card-body {
+    padding: 16px 20px 18px;
+  }
+  .activity-item {
+    padding: 12px 0;
+    gap: 12px;
+  }
+  .quick-actions-grid {
+    gap: 14px;
+  }
+  .quick-action-btn {
+    padding: 20px 12px;
+  }
+}

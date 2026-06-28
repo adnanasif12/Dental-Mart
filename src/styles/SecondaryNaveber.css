@@ -1,0 +1,17 @@
+/* SecondaryNavbar.css */
+.secondary-navbar {
+  background: #232f3e;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  min-height: 40px;
+  box-sizing: border-box;
+}
+
+.secondary-navbar__left {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: nowrap;
+}

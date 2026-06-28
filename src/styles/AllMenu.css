@@ -1,0 +1,111 @@
+/* AllMenu.css */
+.all-menu-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.all-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+  font-family: "Amazon Ember", Arial, sans-serif;
+}
+
+.all-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  outline: 1px solid #fff;
+}
+
+/* Hamburger Icon */
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 18px;
+}
+
+.hamburger-icon span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #fff;
+  border-radius: 1px;
+}
+
+.all-label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Backdrop */
+.all-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+/* Dropdown */
+.all-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: #fff;
+  border: 1px solid #d5d9d9;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  min-width: 200px;
+  z-index: 1000;
+  overflow: hidden;
+  animation: dropdownFadeIn 0.12s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-header {
+  background: #232f3e;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 16px;
+  letter-spacing: 0.3px;
+}
+
+.dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+}
+
+.dropdown-item a {
+  display: block;
+  padding: 9px 16px;
+  color: #0f1111;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.1s;
+}
+
+.dropdown-item a:hover {
+  background: #f3f3f3;
+  color: #c7511f;
+}

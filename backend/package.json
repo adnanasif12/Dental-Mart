@@ -1,0 +1,23 @@
+{
+  "name": "dentalmart-backend",
+  "version": "0.0.1",
+  "description": "DentalMart Backend API",
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.0.0",
+    "@types/react": "19.2.17",
+    "eslint": "^8",
+    "eslint-config-next": "^14.0.0"
+  }
+}

@@ -1,0 +1,22 @@
+/* TodaysDeals.css */
+.todays-deals-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.todays-deals-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  outline: 1px solid #fff;
+}
+
+.deals-text {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: "Amazon Ember", Arial, sans-serif;
+}

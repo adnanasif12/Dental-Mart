@@ -1,0 +1,83 @@
+/* CustomerService.css */
+.cs-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.cs-btn {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.cs-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  outline: 1px solid #fff;
+}
+
+.cs-text {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: "Amazon Ember", Arial, sans-serif;
+}
+
+/* Backdrop */
+.cs-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+/* Dropdown */
+.cs-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: #fff;
+  border: 1px solid #d5d9d9;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  min-width: 190px;
+  z-index: 1000;
+  overflow: hidden;
+  animation: csFadeIn 0.12s ease;
+}
+
+@keyframes csFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cs-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+}
+
+.cs-item a {
+  display: block;
+  padding: 9px 16px;
+  color: #0f1111;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.1s;
+}
+
+.cs-item a:hover {
+  background: #f3f3f3;
+  color: #c7511f;
+}
