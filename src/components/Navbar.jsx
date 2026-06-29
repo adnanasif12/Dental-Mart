@@ -47,18 +47,18 @@ export default function Navbar({ cartCount, onCartClick, onLogoClick }) {
 
         <div className="navbar__search">
           <select className="navbar__search-cat">
-            <option>All Categories</option>
-            <option>Instruments</option>
-            <option>Chairs</option>
-            <option>X-Ray</option>
             <option>Disposables</option>
             <option>Cleaning & Sterilization</option>
+            <option>Protective & Hygiene </option>
+            <option>Basic Clinic Instruments</option>
+            <option>Mixing Items</option>
+            <option>Bur Instruments</option>
             <option>Patient Care</option>
             <option>Accessories</option>
-            <option>Lab / Mixing</option>
             <option>Rotary</option>
-            <option>Light & Mini Devices</option>
-            <option>Consumables</option>
+            <option>Clinic Utility</option>
+            <option>Consumables Materials </option>
+            <option>Packaging</option>
             <option>Storage</option>
             <option>Major Equipment</option>
           </select>
