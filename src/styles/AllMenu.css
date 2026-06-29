@@ -60,14 +60,15 @@
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
-  background: #fff;
+  background: rgba(224, 134, 134, 0.95);
   border: 1px solid #d5d9d9;
+  transition: opacity 0.120s ease;
   border-radius: 4px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   min-width: 200px;
   z-index: 1000;
   overflow: hidden;
-  animation: dropdownFadeIn 0.12s ease;
+  animation: dropdownFadeIn 0.120s ease;
 }
 
 @keyframes dropdownFadeIn {
@@ -82,8 +83,8 @@
 }
 
 .dropdown-header {
-  background: #232f3e;
-  color: #fff;
+  background: #041325;
+  color: #ff4500;
   font-size: 13px;
   font-weight: 700;
   padding: 10px 16px;

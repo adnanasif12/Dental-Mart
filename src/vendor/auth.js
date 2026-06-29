@@ -3,7 +3,9 @@
  */
 
 // Get API URL - default to localhost:3000 for backend
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+// const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = '/api';
+
 
 class AuthVendor {
   static async login(email, password) {
