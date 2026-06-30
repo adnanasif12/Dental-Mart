@@ -1,33 +1,29 @@
-export const products = [
-  {
-    id: 1,
-    name: "Dental Drill",
-    price: 25000,
-    image: "https://via.placeholder.com/200?text=Dental+Drill",
-    rating: 4.5,
-    category: "tools",
-    description: "Professional dental drill for precise operations"
-  },
-  {
-    id: 2,
-    name: "Tooth Whitening Kit",
-    price: 5000,
-    image: "https://via.placeholder.com/200?text=Whitening+Kit",
-    rating: 4.8,
-    category: "cosmetic",
-    description: "Professional tooth whitening system"
-  },
-  {
-    id: 3,
-    name: "Dental Mirror",
-    price: 500,
-    image: "https://via.placeholder.com/200?text=Dental+Mirror",
-    rating: 4.3,
-    category: "tools",
-    description: "Stainless steel dental mirror"
-  },
-];
+import fs from 'fs';
+import path from 'path';
 
-export function getNextProductId() {
+const dataPath = path.join(process.cwd(), 'backend', 'app', 'api', 'products', 'products.json');
+
+function loadProducts() {
+  try {
+    const raw = fs.readFileSync(dataPath, 'utf-8');
+    return JSON.parse(raw);
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveProducts(products) {
+  fs.writeFileSync(dataPath, JSON.stringify(products, null, 2), 'utf-8');
+}
+
+export function getProducts() {
+  return loadProducts();
+}
+
+export function saveProductList(products) {
+  saveProducts(products);
+}
+
+export function getNextProductId(products) {
   return products.length > 0 ? Math.max(...products.map((p) => p.id)) + 1 : 1;
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { products } from '../store';
+import { getProducts, saveProductList } from '../store';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -14,6 +14,7 @@ export async function OPTIONS() {
 // GET single product
 export async function GET(request, { params }) {
   try {
+    const products = getProducts();
     const { id } = params;
     const product = products.find(p => p.id === parseInt(id));
 
@@ -50,6 +51,7 @@ export async function GET(request, { params }) {
 // PUT - Update product
 export async function PUT(request, { params }) {
   try {
+    const products = getProducts();
     const { id } = params;
     const body = await request.json();
     
@@ -76,6 +78,7 @@ export async function PUT(request, { params }) {
     };
 
     products[productIndex] = updatedProduct;
+    saveProductList(products);
 
     return NextResponse.json(
       {
@@ -115,6 +118,7 @@ export async function DELETE(request, { params }) {
 
     const deletedProduct = products[productIndex];
     products.splice(productIndex, 1);
+    saveProductList(products);
 
     return NextResponse.json(
       {

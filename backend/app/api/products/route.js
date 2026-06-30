@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { products, getNextProductId } from './store';
+import { getProducts, saveProductList, getNextProductId } from './store';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -13,6 +13,7 @@ export async function OPTIONS() {
 
 export async function GET(request) {
   try {
+    const products = getProducts();
     return NextResponse.json(
       {
         success: true,
@@ -47,8 +48,9 @@ export async function POST(request) {
       );
     }
 
+    const products = getProducts();
     const newProduct = {
-      id: getNextProductId(),
+      id: getNextProductId(products),
       name: body.name,
       price: parseFloat(body.price),
       image: body.image || "https://via.placeholder.com/200?text=Product",
@@ -58,6 +60,7 @@ export async function POST(request) {
     };
     
     products.push(newProduct);
+    saveProductList(products);
     
     return NextResponse.json(
       {
