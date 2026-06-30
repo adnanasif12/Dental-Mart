@@ -103,6 +103,7 @@ export async function PUT(request, { params }) {
 // DELETE product
 export async function DELETE(request, { params }) {
   try {
+    const products = getProducts();
     const { id } = params;
     const productIndex = products.findIndex(p => p.id === parseInt(id));
 
@@ -112,7 +113,7 @@ export async function DELETE(request, { params }) {
           success: false,
           message: "Product not found"
         },
-        { status: 404 }
+        { status: 404, headers: CORS_HEADERS }
       );
     }
 
@@ -135,7 +136,7 @@ export async function DELETE(request, { params }) {
         message: "Error deleting product",
         error: error.message
       },
-      { status: 500 }
+      { status: 500, headers: CORS_HEADERS }
     );
   }
 }
