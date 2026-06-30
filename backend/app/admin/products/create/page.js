@@ -26,6 +26,20 @@ export default function CreateProduct() {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setFormData(prev => ({
+        ...prev,
+        image: reader.result || prev.image
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -123,14 +137,13 @@ export default function CreateProduct() {
             </div>
 
             <div className={styles.formGroup}>
-              <label>Image URL</label>
+              <label>Product Image</label>
               <input
-                type="url"
-                name="image"
-                value={formData.image}
-                onChange={handleChange}
-                placeholder="https://..."
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
               />
+              <small className={styles.hint}>Select an image from your device</small>
             </div>
           </div>
 

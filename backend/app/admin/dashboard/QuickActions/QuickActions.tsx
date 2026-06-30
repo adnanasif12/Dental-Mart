@@ -1,12 +1,13 @@
 import './QuickActions.css';
 
+import Link from 'next/link';
+
 interface Action {
   icon: string;
   label: string;
   bg: string;
+  href: string;
 }
-
-import Link from 'next/link';
 
 const actions: Action[] = [
   { icon: '➕', label: 'Add Product', bg: '#ede9fe', href: '/admin/products/create' },
