@@ -6,11 +6,13 @@ interface Action {
   bg: string;
 }
 
+import Link from 'next/link';
+
 const actions: Action[] = [
-  { icon: '➕', label: 'Add Product', bg: '#ede9fe' },
-  { icon: '📋', label: 'New Order', bg: '#d1fae5' },
-  { icon: '👤', label: 'Add Customer', bg: '#dbeafe' },
-  { icon: '📊', label: 'Generate Report', bg: '#fef3c7' },
+  { icon: '➕', label: 'Add Product', bg: '#ede9fe', href: '/admin/products/create' },
+  { icon: '📋', label: 'New Order', bg: '#d1fae5', href: '/admin/orders' },
+  { icon: '👤', label: 'Add Customer', bg: '#dbeafe', href: '/admin/customers' },
+  { icon: '📊', label: 'Generate Report', bg: '#fef3c7', href: '/admin/reports' },
 ];
 
 const QuickActions = () => {
@@ -22,14 +24,15 @@ const QuickActions = () => {
       <div className="card-body">
         <div className="quick-actions-grid">
           {actions.map((action) => (
-            <button
+            <Link
               key={action.label}
+              href={action.href}
               className="quick-action-btn"
               style={{ background: action.bg }}
             >
               <span className="quick-action-icon">{action.icon}</span>
               {action.label}
-            </button>
+            </Link>
           ))}
         </div>
       </div>
