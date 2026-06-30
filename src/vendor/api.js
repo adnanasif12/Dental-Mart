@@ -10,8 +10,11 @@ class APIVendor {
    * Fetch all products from backend
    */
   static async getProducts() {
-    // Try primary API endpoint first; fall back to relative `/api/products` if network fails
-    const targets = [`${API_BASE_URL}/products`, `/api/products`];
+    // Use a fallback only for local development where `/api/products` is available.
+    const targets = [`${API_BASE_URL}/products`];
+    if (API_BASE_URL.startsWith('/')) {
+      targets.push('/api/products');
+    }
 
     let lastError;
     for (const url of targets) {
