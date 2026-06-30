@@ -7,8 +7,8 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+export async function OPTIONS(request) {
+  return new NextResponse(undefined, { status: 204, headers: CORS_HEADERS });
 }
 
 // GET single product
