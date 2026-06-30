@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./styles/main.css";
 
@@ -17,12 +17,47 @@ import TodaysDeals    from "./components/TodaysDeals";
 
 export default function App() {
   const [page, setPage] = useState("shop"); // "shop" | "cart"
-  const [cartCount, setCartCount] = useState(3);
+  const [cartItems, setCartItems] = useState([]);
+  const [cartCount, setCartCount] = useState(0);
 
   const goShop = () => setPage("shop");
   const goCart = () => setPage("cart");
 
-  const handleAddToCart = () => setCartCount((n) => n + 1);
+  useEffect(() => {
+    setCartCount(cartItems.reduce((sum, item) => sum + item.qty, 0));
+  }, [cartItems]);
+
+  const handleAddToCart = (product) => {
+    setCartItems((prev) => {
+      const existing = prev.find((item) => item.id === product.id);
+      if (existing) {
+        return prev.map((item) =>
+          item.id === product.id
+            ? { ...item, qty: item.qty + 1 }
+            : item
+        );
+      }
+
+      return [...prev, { ...product, qty: 1 }];
+    });
+  };
+
+  const handleBuyNow = (product) => {
+    handleAddToCart(product);
+    goCart();
+  };
+
+  const handleRemoveFromCart = (productId) => {
+    setCartItems((prev) => prev.filter((item) => item.id !== productId));
+  };
+
+  const handleQtyChange = (productId, qty) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === productId ? { ...item, qty: Math.max(1, qty) } : item
+      )
+    );
+  };
 
   // Get your Google Client ID from Google Cloud Console
   // For now, we'll check if it's set, otherwise we'll render without Google OAuth
@@ -53,7 +88,7 @@ export default function App() {
             <Sidebar />
             <ProductGrid
               onAddToCart={handleAddToCart}
-              onBuyNow={goCart}
+              onBuyNow={handleBuyNow}
             />
           </div>
 
@@ -63,7 +98,12 @@ export default function App() {
       )}
 
       {page === "cart" && (
-        <CartPage onContinue={goShop} />
+        <CartPage
+          cartItems={cartItems}
+          onRemoveItem={handleRemoveFromCart}
+          onQtyChange={handleQtyChange}
+          onContinue={goShop}
+        />
       )}
 
       {/* Footer (always visible) */}
