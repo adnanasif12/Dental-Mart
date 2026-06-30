@@ -1,6 +1,16 @@
 import { NextResponse } from 'next/server';
 import { products } from '../store';
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+export async function OPTIONS() {
+  return NextResponse.json(null, { status: 204, headers: CORS_HEADERS });
+}
+
 // GET single product
 export async function GET(request, { params }) {
   try {
@@ -23,7 +33,7 @@ export async function GET(request, { params }) {
         data: product,
         message: "Product fetched successfully"
       },
-      { status: 200 }
+      { status: 200, headers: CORS_HEADERS }
     );
   } catch (error) {
     return NextResponse.json(
@@ -73,7 +83,7 @@ export async function PUT(request, { params }) {
         data: updatedProduct,
         message: "Product updated successfully"
       },
-      { status: 200 }
+      { status: 200, headers: CORS_HEADERS }
     );
   } catch (error) {
     return NextResponse.json(
@@ -112,7 +122,7 @@ export async function DELETE(request, { params }) {
         data: deletedProduct,
         message: "Product deleted successfully"
       },
-      { status: 200 }
+      { status: 200, headers: CORS_HEADERS }
     );
   } catch (error) {
     return NextResponse.json(
