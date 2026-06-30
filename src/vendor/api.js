@@ -10,24 +10,34 @@ class APIVendor {
    * Fetch all products from backend
    */
   static async getProducts() {
-    try {
-      const response = await fetch(`${API_BASE_URL}/products`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    // Try primary API endpoint first; fall back to relative `/api/products` if network fails
+    const targets = [`${API_BASE_URL}/products`, `/api/products`];
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    let lastError;
+    for (const url of targets) {
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        // keep trying next target
+        console.warn(`Failed to fetch products from ${url}:`, error.message);
+        lastError = error;
       }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      throw error;
     }
+
+    console.error('All product fetch attempts failed');
+    throw lastError || new Error('Failed to fetch products');
   }
 
   /**
