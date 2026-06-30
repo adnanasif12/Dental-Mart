@@ -46,8 +46,8 @@ export default function Navbar({ cartCount, onCartClick, onLogoClick }) {
         </div>
 
         <div className="navbar__search">
-          <select className="navbar__search-cat">
-            <option>Select Category</option>
+          <select className="navbar__search-cat" defaultValue="">
+            <option value="" disabled style={{ fontWeight: 900, color: '#020000d5' }}>Select Category</option>
             <option>Disposables</option>
             <option>Cleaning & Sterilization</option>
             <option>Protective & Hygiene </option>

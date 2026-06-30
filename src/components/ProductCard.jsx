@@ -18,14 +18,20 @@ export default function ProductCard({ product, onAddToCart, onBuyNow }) {
     >
       {/* Image area */}
       <div className="product-card__img-wrap" style={{ background: bg }}>
+        <div className="product-card__image-frame">
+          {ProductIcons[id]}
+        </div>
         {badge && <div className="product-card__badge">{badge}</div>}
-        {ProductIcons[id]}
         {prime && <div className="product-card__prime">prime</div>}
       </div>
 
       {/* Body */}
       <div className="product-card__body">
-        {sponsored && <div className="product-card__sponsored">Sponsored</div>}
+        <div className="product-card__top-row">
+          {sponsored && <span className="product-card__sponsored">Sponsored</span>}
+          <span className="product-card__rating-chip">{rating} ★</span>
+        </div>
+
         <div className="product-card__name">{name}</div>
         <div className="product-card__brand">
           by <span>{brand}</span>
@@ -33,9 +39,7 @@ export default function ProductCard({ product, onAddToCart, onBuyNow }) {
 
         <div className="product-card__stars">
           <StarRating rating={rating} size={13} />
-          <span className="product-card__review-count">
-            {rating} ({reviews})
-          </span>
+          <span className="product-card__review-count">({reviews})</span>
         </div>
 
         <div className="product-card__price-row">
@@ -43,28 +47,34 @@ export default function ProductCard({ product, onAddToCart, onBuyNow }) {
           <span className="product-card__price">{price.toLocaleString("en-IN")}</span>
           <span className="product-card__old-price">৳{oldPrice.toLocaleString("en-IN")}</span>
         </div>
+
         <div className="product-card__save">
           Save ৳{saved.toLocaleString("en-IN")} ({discount}%)
         </div>
-        <div className="product-card__delivery">
-          FREE delivery <strong>{delivery}</strong>
-        </div>
-        <div className={`product-card__stock ${isLowStock ? "product-card__stock--warn" : "product-card__stock--ok"}`}>
-          {stock}
+
+        <div className="product-card__info-row">
+          <div className="product-card__delivery">
+            FREE delivery <strong>{delivery}</strong>
+          </div>
+          <div className={`product-card__stock ${isLowStock ? "product-card__stock--warn" : "product-card__stock--ok"}`}>
+            {stock}
+          </div>
         </div>
 
-        <button
-          className="btn-add-cart"
-          onClick={(e) => { e.stopPropagation(); onAddToCart(); }}
-        >
-          Add to Cart
-        </button>
-        <button
-          className="btn-buy-now"
-          onClick={(e) => { e.stopPropagation(); onBuyNow(); }}
-        >
-          Buy Now
-        </button>
+        <div className="product-card__action-group">
+          <button
+            className="btn-add-cart"
+            onClick={(e) => { e.stopPropagation(); onAddToCart(); }}
+          >
+            Add to Cart
+          </button>
+          <button
+            className="btn-buy-now"
+            onClick={(e) => { e.stopPropagation(); onBuyNow(); }}
+          >
+            Buy Now
+          </button>
+        </div>
       </div>
     </div>
   );
