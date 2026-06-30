@@ -1,7 +1,45 @@
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const dataPath = path.join(process.cwd(), 'backend', 'app', 'api', 'products', 'products.json');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const bundlePath = path.join(__dirname, 'products.json');
+const tmpPath = path.join(os.tmpdir(), 'dentalmart-products.json');
+
+function ensureDirExists(filePath) {
+  const dir = path.dirname(filePath);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+}
+
+function getDataPath() {
+  if (fs.existsSync(tmpPath)) {
+    return tmpPath;
+  }
+
+  if (fs.existsSync(bundlePath)) {
+    try {
+      ensureDirExists(tmpPath);
+      fs.copyFileSync(bundlePath, tmpPath);
+      return tmpPath;
+    } catch (error) {
+      return bundlePath;
+    }
+  }
+
+  try {
+    ensureDirExists(tmpPath);
+    fs.writeFileSync(tmpPath, '[]', 'utf-8');
+    return tmpPath;
+  } catch (error) {
+    return bundlePath;
+  }
+}
+
+const dataPath = getDataPath();
 
 function loadProducts() {
   try {
@@ -13,7 +51,12 @@ function loadProducts() {
 }
 
 function saveProducts(products) {
-  fs.writeFileSync(dataPath, JSON.stringify(products, null, 2), 'utf-8');
+  try {
+    ensureDirExists(dataPath);
+    fs.writeFileSync(dataPath, JSON.stringify(products, null, 2), 'utf-8');
+  } catch (error) {
+    // ignore write errors in read-only environments
+  }
 }
 
 export function getProducts() {

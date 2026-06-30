@@ -2,10 +2,13 @@
  * Cart Vendor - Handles cart operations
  */
 
+const API_BASE_URL = import.meta.env.VITE_API_URL ??
+  (import.meta.env.MODE === 'development' ? '/api' : 'https://dental-mart-backend.vercel.app/api');
+
 class CartVendor {
   static async getCart() {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3000/api'}/cart`, {
+      const response = await fetch(`${API_BASE_URL}/cart`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -23,7 +26,7 @@ class CartVendor {
 
   static async addToCart(productId, quantity) {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3000/api'}/cart/add`, {
+      const response = await fetch(`${API_BASE_URL}/cart/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +45,7 @@ class CartVendor {
 
   static async removeFromCart(productId) {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3000/api'}/cart/remove/${productId}`, {
+      const response = await fetch(`${API_BASE_URL}/cart/remove/${productId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

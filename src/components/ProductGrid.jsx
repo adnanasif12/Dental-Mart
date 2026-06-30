@@ -1,12 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
-import { products } from "../data/products";
+import APIVendor from "../vendor/api";
 
 const PAGES = ["‹ Prev", 1, 2, 3, 4, 5, "...", 13, "Next ›"];
 
 export default function ProductGrid({ onAddToCart, onBuyNow }) {
   const [sortBy, setSortBy] = useState("Featured");
   const [activePage, setActivePage] = useState(1);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const data = await APIVendor.getProducts();
+        if (data.success) {
+          setProducts(data.data);
+        } else {
+          setError(data.message || "Unable to load products");
+        }
+      } catch (err) {
+        setError(err.message || "Unable to load products");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div className="main-area">
@@ -33,16 +58,22 @@ export default function ProductGrid({ onAddToCart, onBuyNow }) {
       </div>
 
       {/* Cards */}
-      <div className="product-grid">
-        {products.map((p) => (
-          <ProductCard
-            key={p.id}
-            product={p}
-            onAddToCart={onAddToCart}
-            onBuyNow={onBuyNow}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className="product-grid-loading">Loading products...</div>
+      ) : error ? (
+        <div className="product-grid-error">{error}</div>
+      ) : (
+        <div className="product-grid">
+          {products.map((p) => (
+            <ProductCard
+              key={p.id}
+              product={p}
+              onAddToCart={onAddToCart}
+              onBuyNow={onBuyNow}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Pagination */}
       <div className="pagination">

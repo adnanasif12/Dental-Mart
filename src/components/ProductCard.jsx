@@ -4,10 +4,27 @@ import { ProductIcons } from "../data/icons";
 
 export default function ProductCard({ product, onAddToCart, onBuyNow }) {
   const [hover, setHover] = useState(false);
-  const { id, name, brand, rating, reviews, price, oldPrice, discount, delivery, stock, badge, prime, sponsored, bg } = product;
+  const {
+    id,
+    name,
+    brand,
+    rating,
+    reviews = 0,
+    price,
+    oldPrice = price,
+    discount = 0,
+    delivery = "3-5 days",
+    stock = "In Stock",
+    badge = null,
+    prime = false,
+    sponsored = false,
+    bg = "#f8f8f8",
+    image,
+    category,
+  } = product;
 
-  const saved = oldPrice - price;
-  const isLowStock = stock.toLowerCase().includes("only");
+  const saved = oldPrice > price ? oldPrice - price : 0;
+  const isLowStock = stock && stock.toLowerCase().includes("only");
 
   return (
     <div
@@ -19,7 +36,11 @@ export default function ProductCard({ product, onAddToCart, onBuyNow }) {
       {/* Image area */}
       <div className="product-card__img-wrap" style={{ background: bg }}>
         <div className="product-card__image-frame">
-          {ProductIcons[id]}
+          {image ? (
+            <img src={image} alt={name} className="product-card__image" />
+          ) : (
+            ProductIcons[id] || <div className="product-card__placeholder" />
+          )}
         </div>
         {badge && <div className="product-card__badge">{badge}</div>}
         {prime && <div className="product-card__prime">prime</div>}
@@ -34,7 +55,11 @@ export default function ProductCard({ product, onAddToCart, onBuyNow }) {
 
         <div className="product-card__name">{name}</div>
         <div className="product-card__brand">
-          by <span>{brand}</span>
+          {brand ? (
+            <>by <span>{brand}</span></>
+          ) : (
+            <span>{category || 'Unknown category'}</span>
+          )}
         </div>
 
         <div className="product-card__stars">
