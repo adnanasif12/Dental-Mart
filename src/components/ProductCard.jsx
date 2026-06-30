@@ -26,6 +26,24 @@ export default function ProductCard({ product, onAddToCart, onBuyNow }) {
   const saved = oldPrice > price ? oldPrice - price : 0;
   const isLowStock = stock && stock.toLowerCase().includes("only");
 
+  const getSafeImage = (img) => {
+    if (!img) return img;
+    try {
+      const u = new URL(img);
+      // ensure query params are properly encoded (e.g. text=Product:1)
+      if (u.searchParams && u.searchParams.has("text")) {
+        const t = u.searchParams.get("text");
+        u.searchParams.set("text", t);
+        return u.toString();
+      }
+      return img;
+    } catch (e) {
+      return img;
+    }
+  };
+
+  const imageSrc = getSafeImage(image);
+
   return (
     <div
       className="product-card"
@@ -37,7 +55,15 @@ export default function ProductCard({ product, onAddToCart, onBuyNow }) {
       <div className="product-card__img-wrap" style={{ background: bg }}>
         <div className="product-card__image-frame">
           {image ? (
-            <img src={image} alt={name} className="product-card__image" />
+            <img
+              src={imageSrc}
+              alt={name}
+              className="product-card__image"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/fallback.svg";
+              }}
+            />
           ) : (
             ProductIcons[id] || <div className="product-card__placeholder" />
           )}

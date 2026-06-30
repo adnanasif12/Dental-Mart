@@ -85,13 +85,32 @@ export default function ProductsList() {
         <p className={styles.noData}>No products found</p>
       ) : (
         <div className={styles.productsGrid}>
-          {filteredProducts.map(product => (
-            <div key={product.id} className={styles.productCard}>
-              <img 
-                src={product.image} 
-                alt={product.name}
-                className={styles.productImage}
-              />
+          {filteredProducts.map(product => {
+            const getSafeImage = (img) => {
+              if (!img) return '/fallback.svg';
+              try {
+                const u = new URL(img);
+                if (u.searchParams && u.searchParams.has('text')) {
+                  const t = u.searchParams.get('text');
+                  u.searchParams.set('text', encodeURIComponent(t));
+                  return u.toString();
+                }
+                return img;
+              } catch (e) {
+                return img || '/fallback.svg';
+              }
+            };
+
+            const imgSrc = getSafeImage(product.image);
+
+            return (
+              <div key={product.id} className={styles.productCard}>
+                <img
+                  src={imgSrc}
+                  alt={product.name}
+                  className={styles.productImage}
+                  onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/fallback.svg'; }}
+                />
               <div className={styles.productContent}>
                 <h3>{product.name}</h3>
                 <p className={styles.category}>{product.category}</p>

@@ -8,7 +8,7 @@ const CORS_HEADERS = {
 };
 
 export async function OPTIONS() {
-  return NextResponse.json(null, { status: 204, headers: CORS_HEADERS });
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
 }
 
 export async function GET(request) {
