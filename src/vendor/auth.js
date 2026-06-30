@@ -2,13 +2,12 @@
  * Authentication Vendor - Handles user authentication
  */
 
-const API_URL = import.meta.env.VITE_API_URL?.trim() ||
-  (import.meta.env.MODE === 'development' ? '/api' : 'https://dental-mart-backend.vercel.app/api');
+import API_BASE_URL from './config.js';
 
 class AuthVendor {
   static async login(email, password) {
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,7 +29,7 @@ class AuthVendor {
 
   static async googleLogin(credential) {
     try {
-      const response = await fetch(`${API_URL}/auth/google`, {
+      const response = await fetch(`${API_BASE_URL}/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +51,7 @@ class AuthVendor {
 
   static async register(userData) {
     try {
-      const response = await fetch(`${API_URL}/auth/register`, {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

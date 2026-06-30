@@ -3,8 +3,7 @@
  * Handles all backend API calls for the frontend
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL?.trim() ||
-  (import.meta.env.MODE === 'development' ? '/api' : 'https://dental-mart-backend.vercel.app/api');
+import API_BASE_URL from './config.js';
 
 class APIVendor {
   /**
