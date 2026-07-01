@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getProducts, saveProductList, getNextProductId } from './store';
+import dbConnect from '@/lib/mongodb';
+import Product from '@/models/Product';
+import { getProducts, saveProductList } from './store';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -13,16 +15,63 @@ export async function OPTIONS(request) {
 
 export async function GET(request) {
   try {
-    const products = getProducts();
-    return NextResponse.json(
-      {
-        success: true,
-        data: products,
-        message: "Products fetched successfully"
-      },
-      { status: 200, headers: CORS_HEADERS }
-    );
+    // Try MongoDB first
+    if (process.env.MONGODB_URI) {
+      try {
+        await dbConnect();
+        const products = await Product.find({}).sort({ createdAt: -1 });
+        
+        if (products.length === 0) {
+          // Seed initial products if empty
+          const initialProducts = getProducts();
+          if (initialProducts.length > 0) {
+            await Product.insertMany(initialProducts);
+            return NextResponse.json(
+              {
+                success: true,
+                data: initialProducts,
+                message: "Products fetched successfully"
+              },
+              { status: 200, headers: CORS_HEADERS }
+            );
+          }
+        }
+        
+        return NextResponse.json(
+          {
+            success: true,
+            data: products,
+            message: "Products fetched successfully"
+          },
+          { status: 200, headers: CORS_HEADERS }
+        );
+      } catch (mongoError) {
+        console.log('MongoDB query failed, falling back to file storage:', mongoError.message);
+        // Fallback to file storage
+        const products = getProducts();
+        return NextResponse.json(
+          {
+            success: true,
+            data: products,
+            message: "Products fetched successfully"
+          },
+          { status: 200, headers: CORS_HEADERS }
+        );
+      }
+    } else {
+      // No MongoDB URI, use file storage
+      const products = getProducts();
+      return NextResponse.json(
+        {
+          success: true,
+          data: products,
+          message: "Products fetched successfully"
+        },
+        { status: 200, headers: CORS_HEADERS }
+      );
+    }
   } catch (error) {
+    console.error('Error fetching products:', error);
     return NextResponse.json(
       {
         success: false,
@@ -44,33 +93,98 @@ export async function POST(request) {
           success: false,
           message: "Name and price are required"
         },
-        { status: 400 }
+        { status: 400, headers: CORS_HEADERS }
       );
     }
 
-    const products = getProducts();
-    const newProduct = {
-      id: getNextProductId(products),
-      name: body.name,
-      price: parseFloat(body.price),
-      image: body.image || "https://via.placeholder.com/200?text=Product",
-      rating: parseFloat(body.rating) || 4.0,
-      category: body.category || "tools",
-      description: body.description || ""
-    };
-    
-    products.push(newProduct);
-    saveProductList(products);
-    
-    return NextResponse.json(
-      {
-        success: true,
-        data: newProduct,
-        message: "Product created successfully"
-      },
-      { status: 201, headers: CORS_HEADERS }
-    );
+    // Try MongoDB first
+    if (process.env.MONGODB_URI) {
+      try {
+        await dbConnect();
+        
+        // Get next ID
+        const lastProduct = await Product.findOne().sort({ id: -1 });
+        const nextId = lastProduct ? lastProduct.id + 1 : 1;
+        
+        const newProduct = new Product({
+          id: nextId,
+          name: body.name,
+          price: parseFloat(body.price),
+          image: body.image || "https://via.placeholder.com/200?text=Product",
+          rating: parseFloat(body.rating) || 4.0,
+          category: body.category || "tools",
+          description: body.description || "",
+          inStock: body.inStock !== false,
+          quantity: body.quantity || 0
+        });
+        
+        await newProduct.save();
+        
+        return NextResponse.json(
+          {
+            success: true,
+            data: newProduct,
+            message: "Product created successfully"
+          },
+          { status: 201, headers: CORS_HEADERS }
+        );
+      } catch (mongoError) {
+        console.log('MongoDB save failed, falling back to file storage:', mongoError.message);
+        // Fallback to file storage
+        const products = getProducts();
+        const nextId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+        
+        const newProduct = {
+          id: nextId,
+          name: body.name,
+          price: parseFloat(body.price),
+          image: body.image || "https://via.placeholder.com/200?text=Product",
+          rating: parseFloat(body.rating) || 4.0,
+          category: body.category || "tools",
+          description: body.description || ""
+        };
+        
+        products.push(newProduct);
+        saveProductList(products);
+        
+        return NextResponse.json(
+          {
+            success: true,
+            data: newProduct,
+            message: "Product created successfully"
+          },
+          { status: 201, headers: CORS_HEADERS }
+        );
+      }
+    } else {
+      // No MongoDB, use file storage
+      const products = getProducts();
+      const nextId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+      
+      const newProduct = {
+        id: nextId,
+        name: body.name,
+        price: parseFloat(body.price),
+        image: body.image || "https://via.placeholder.com/200?text=Product",
+        rating: parseFloat(body.rating) || 4.0,
+        category: body.category || "tools",
+        description: body.description || ""
+      };
+      
+      products.push(newProduct);
+      saveProductList(products);
+      
+      return NextResponse.json(
+        {
+          success: true,
+          data: newProduct,
+          message: "Product created successfully"
+        },
+        { status: 201, headers: CORS_HEADERS }
+      );
+    }
   } catch (error) {
+    console.error('Error creating product:', error);
     return NextResponse.json(
       {
         success: false,

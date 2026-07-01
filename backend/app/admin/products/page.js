@@ -10,6 +10,8 @@ export default function ProductsList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 20;
 
   useEffect(() => {
     const checkAuth = () => {
@@ -60,6 +62,10 @@ export default function ProductsList() {
     p.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const displayedProducts = filteredProducts.slice(startIndex, startIndex + productsPerPage);
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -74,7 +80,10 @@ export default function ProductsList() {
           type="text"
           placeholder="Search products..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1);
+          }}
           className={styles.searchInput}
         />
       </div>
@@ -84,58 +93,94 @@ export default function ProductsList() {
       ) : filteredProducts.length === 0 ? (
         <p className={styles.noData}>No products found</p>
       ) : (
-        <div className={styles.productsGrid}>
-          {filteredProducts.map(product => {
-            const getSafeImage = (img) => {
-              if (!img) return '/fallback.svg';
-              try {
-                const u = new URL(img);
-                if (u.searchParams && u.searchParams.has('text')) {
-                  const t = u.searchParams.get('text');
-                  u.searchParams.set('text', encodeURIComponent(t));
-                  return u.toString();
+        <>
+          <div className={styles.productsGrid}>
+            {displayedProducts.map(product => {
+              const getSafeImage = (img) => {
+                if (!img) return '/fallback.svg';
+                try {
+                  const u = new URL(img);
+                  if (u.searchParams && u.searchParams.has('text')) {
+                    const t = u.searchParams.get('text');
+                    u.searchParams.set('text', encodeURIComponent(t));
+                    return u.toString();
+                  }
+                  return img;
+                } catch (e) {
+                  return img || '/fallback.svg';
                 }
-                return img;
-              } catch (e) {
-                return img || '/fallback.svg';
-              }
-            };
+              };
 
-            const imgSrc = getSafeImage(product.image);
+              const imgSrc = getSafeImage(product.image);
 
-            return (
-              <div key={product.id} className={styles.productCard}>
-                <img
-                  src={imgSrc}
-                  alt={product.name}
-                  className={styles.productImage}
-                  onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/fallback.svg'; }}
-                />
-              <div className={styles.productContent}>
-                <h3>{product.name}</h3>
-                <p className={styles.category}>{product.category}</p>
-                <p className={styles.price}>৳{product.price.toLocaleString()}</p>
-                <p className={styles.rating}>⭐ {product.rating}</p>
-                
-                <div className={styles.actions}>
-                  <Link 
-                    href={`/admin/products/edit/${product.id}`}
-                    className={styles.editBtn}
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(product.id)}
-                    className={styles.deleteBtn}
-                  >
-                    Delete
-                  </button>
+              return (
+                <div key={product.id} className={styles.productCard}>
+                  <img
+                    src={imgSrc}
+                    alt={product.name}
+                    className={styles.productImage}
+                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/fallback.svg'; }}
+                  />
+                <div className={styles.productContent}>
+                  <h3>{product.name}</h3>
+                  <p className={styles.category}>{product.category}</p>
+                  <p className={styles.price}>৳{product.price.toLocaleString()}</p>
+                  <p className={styles.rating}>⭐ {product.rating}</p>
+                  
+                  <div className={styles.actions}>
+                    <Link 
+                      href={`/admin/products/edit/${product.id}`}
+                      className={styles.editBtn}
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(product.id)}
+                      className={styles.deleteBtn}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
+              );
+            })}
+          </div>
+
+          <div className={styles.pagination}>
+            <button 
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+              className={styles.paginationBtn}
+            >
+              ← Previous
+            </button>
+            
+            <div className={styles.pageNumbers}>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`${styles.pageBtn} ${currentPage === page ? styles.activePage : ''}`}
+                >
+                  {page}
+                </button>
+              ))}
             </div>
-            );
-          })}
-        </div>
+
+            <button 
+              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              disabled={currentPage === totalPages}
+              className={styles.paginationBtn}
+            >
+              Next →
+            </button>
+          </div>
+          
+          <p className={styles.pageInfo}>
+            Showing {startIndex + 1} to {Math.min(startIndex + productsPerPage, filteredProducts.length)} of {filteredProducts.length} products
+          </p>
+        </>
       )}
     </div>
   );
