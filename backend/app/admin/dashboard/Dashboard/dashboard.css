@@ -57,12 +57,28 @@
   box-sizing: border-box;
 }
 
+.grid-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 @media (max-width: 1200px) {
   .grid-stats {
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
   }
 }
+
 
 @media (max-width: 1024px) {
   .dashboard-content {

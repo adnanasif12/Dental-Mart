@@ -65,7 +65,7 @@ const Dashboard = () => {
       </div>
 
       {/* Charts Row */}
-      <div className="grid-bottom" style={{ marginBottom: '24px' }}>
+      <div className="grid-charts" style={{ marginBottom: '24px' }}>
         <BarChart />
         <DonutChart />
       </div>
@@ -73,7 +73,7 @@ const Dashboard = () => {
       {/* Bottom Row */}
       <div className="grid-bottom">
         <RecentActivity />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div className="right-column">
           <QuickActions />
           <ProgressSection />
         </div>

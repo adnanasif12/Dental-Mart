@@ -4,6 +4,8 @@ interface Segment {
   color: string;
 }
 
+import styles from '../Barchart/Barchart.module.css';
+
 const segments: Segment[] = [
   { label: 'Electronics', value: 40, color: '#7c3aed' },
   { label: 'Clothing', value: 25, color: '#10b981' },
@@ -41,55 +43,42 @@ const buildDonut = (segs: Segment[], cx: number, cy: number, r: number) => {
 };
 
 const DonutChart = () => {
-  const size = 160;
+  const size = 180;
   const cx = size / 2;
   const cy = size / 2;
-  const r = 55;
+  const r = 60;
 
   return (
-    <div className="card">
-      <div className="card-header">
-        <span className="card-title">Sales by Category</span>
-        <button className="card-action">Details</button>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardTitle}>Sales by Category</span>
+        <button className={styles.cardAction}>Details</button>
       </div>
-      <div className="card-body">
-        <div className="donut-wrapper">
-          {/* SVG Donut */}
-          <div className="donut-svg-wrap">
-            <svg
-              width={size}
-              height={size}
-              style={{ transform: 'rotate(-90deg)' }}
-            >
-              {/* Background circle */}
-              <circle
-                cx={cx}
-                cy={cy}
-                r={r}
-                fill="transparent"
-                stroke="#f0f0f7"
-                strokeWidth="22"
-              />
+      <div className={styles.cardBody}>
+        <div className={styles.donutWrapper}>
+          <div className={styles.donutSvgWrap}>
+            <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+              <circle cx={cx} cy={cy} r={r} fill="transparent" stroke="#f0f0f7" strokeWidth="22" />
               {buildDonut(segments, cx, cy, r)}
             </svg>
-            <div className="donut-center-text">
-              <div className="donut-center-value">{total}%</div>
-              <div className="donut-center-label">Total</div>
+            <div className={styles.donutCenterText}>
+              <div className={styles.donutCenterValue}>{total}%</div>
+              <div className={styles.donutCenterLabel}>Total</div>
             </div>
           </div>
 
-          {/* Legend */}
-          <div className="donut-legend">
+          <div className={styles.donutLegend}>
+            <div className={styles.donutSummary}>
+              <div className={styles.donutSummaryValue}>100%</div>
+              <div className={styles.donutSummaryLabel}>Total</div>
+            </div>
             {segments.map((seg) => (
-              <div className="donut-legend-item" key={seg.label}>
-                <div className="donut-legend-left">
-                  <div
-                    className="donut-legend-dot"
-                    style={{ background: seg.color }}
-                  />
-                  <span className="donut-legend-label">{seg.label}</span>
+              <div className={styles.donutLegendItem} key={seg.label}>
+                <div className={styles.donutLegendLeft}>
+                  <div className={styles.donutLegendDot} style={{ background: seg.color }} />
+                  <span className={styles.donutLegendLabel}>{seg.label}</span>
                 </div>
-                <span className="donut-legend-val">{seg.value}%</span>
+                <span className={styles.donutLegendVal}>{seg.value}%</span>
               </div>
             ))}
           </div>

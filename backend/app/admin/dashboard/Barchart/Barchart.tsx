@@ -1,38 +1,34 @@
-import './Barchart.module.css';
+import styles from './Barchart.module.css';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
 
 const revenueData = [62, 78, 55, 90, 72, 84, 95];
 const expenseData = [40, 50, 38, 60, 48, 55, 62];
 
-const maxVal = 100;
-
 const BarChart = () => {
   return (
-    <div className="card">
-      <div className="card-header">
-        <span className="card-title">Revenue vs Expense</span>
-        <button className="card-action">This Year</button>
+    <div className={styles.card}>
+      <div className={styles.cardHeader}>
+        <span className={styles.cardTitle}>Revenue vs Expense</span>
+        <button className={styles.cardAction}>This Year</button>
       </div>
-      <div className="card-body">
-        <div className="chart-container">
-          <div className="chart-bar-group">
+      <div className={styles.cardBody}>
+        <div className={styles.chartContainer}>
+          <div className={styles.chartBarGroup}>
             {months.map((month, idx) => (
-              <div className="chart-bar-wrap" key={month}>
-                {/* Revenue bar */}
+              <div className={styles.monthGroup} key={month}>
                 <div
-                  className="chart-bar"
+                  className={styles.chartBar}
                   style={{
-                    height: `${(revenueData[idx] / maxVal) * 100}%`,
+                    height: `${revenueData[idx]}%`,
                     background: 'linear-gradient(180deg, #7c3aed, #a78bfa)',
                   }}
                   title={`Revenue: ${revenueData[idx]}k`}
                 />
-                {/* Expense bar */}
                 <div
-                  className="chart-bar"
+                  className={styles.chartBar}
                   style={{
-                    height: `${(expenseData[idx] / maxVal) * 100}%`,
+                    height: `${expenseData[idx]}%`,
                     background: 'linear-gradient(180deg, #10b981, #6ee7b7)',
                   }}
                   title={`Expense: ${expenseData[idx]}k`}
@@ -41,27 +37,21 @@ const BarChart = () => {
             ))}
           </div>
 
-          {/* X-axis labels */}
-          <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
+          <div className={styles.monthLabels}>
             {months.map((month) => (
-              <div
-                key={month}
-                className="chart-bar-label"
-                style={{ flex: 1, textAlign: 'center' }}
-              >
+              <span key={month} className={styles.monthLabel}>
                 {month}
-              </div>
+              </span>
             ))}
           </div>
 
-          {/* Legend */}
-          <div className="chart-legend">
-            <div className="legend-item">
-              <div className="legend-dot" style={{ background: '#7c3aed' }} />
+          <div className={styles.chartLegend}>
+            <div className={styles.legendItem}>
+              <div className={styles.legendDot} style={{ background: '#7c3aed' }} />
               Revenue
             </div>
-            <div className="legend-item">
-              <div className="legend-dot" style={{ background: '#10b981' }} />
+            <div className={styles.legendItem}>
+              <div className={styles.legendDot} style={{ background: '#10b981' }} />
               Expense
             </div>
           </div>
@@ -72,3 +62,6 @@ const BarChart = () => {
 };
 
 export default BarChart;
+
+
+
