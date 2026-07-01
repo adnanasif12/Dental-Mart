@@ -394,6 +394,43 @@ a {
   font-size: 16px;
 }
 
+/* Responsive Grid Layout */
+@media (max-width: 1400px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .product-grid-info {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .product-grid-info {
+    font-size: 11px;
+  }
+}
+
 /* ─── PRODUCT CARD ──────────────────────────────────────────── */
 .product-card {
   background: white;
@@ -646,6 +683,37 @@ a {
 .pagination__ellipsis {
   padding: 0 4px;
   color: #999;
+}
+
+/* Responsive Pagination */
+@media (max-width: 768px) {
+  .pagination {
+    padding: 10px 12px;
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+  
+  .pagination__btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .pagination__ellipsis {
+    padding: 0 2px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    padding: 8px 10px;
+    gap: 2px;
+  }
+  
+  .pagination__btn {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
 }
 
 /* ─── BEST SELLERS ──────────────────────────────────────────── */
