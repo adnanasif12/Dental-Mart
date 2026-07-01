@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import APIVendor from "../vendor/api";
+import API_BASE_URL from "../vendor/config.js";
 
 const PRODUCTS_PER_PAGE = 20; // 5 columns x 4 rows
 
@@ -104,6 +105,9 @@ export default function ProductGrid({ onAddToCart, onBuyNow }) {
           {/* Product count info */}
           <div className="product-grid-info">
             Showing {startIdx + 1}-{Math.min(endIdx, products.length)} of {products.length} results
+          </div>
+          <div className="product-grid-api">
+            Loaded from: <code>{API_BASE_URL}/products</code>
           </div>
         </div>
       )}

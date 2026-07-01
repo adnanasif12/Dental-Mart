@@ -8,12 +8,6 @@ let cacheLoaded = false;
 async function loadProducts() {
   console.log('=== loadProducts called ===');
   console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI);
-  
-  // MongoDB is the only source of truth
-  if (!process.env.MONGODB_URI) {
-    console.error('MONGODB_URI is not configured!');
-    return [];
-  }
 
   try {
     console.log('Connecting to MongoDB...');
@@ -47,11 +41,6 @@ async function saveProducts(products) {
   productsCache = products;
   cacheLoaded = true;
 
-  if (!process.env.MONGODB_URI) {
-    console.error('MONGODB_URI is not configured! Cannot save products');
-    return false;
-  }
-
   try {
     console.log('Connecting to MongoDB...');
     await dbConnect();
@@ -66,7 +55,7 @@ async function saveProducts(products) {
     return true;
   } catch (error) {
     console.error('Error saving products to MongoDB:', error.message, error.stack);
-    return false;
+    throw error;
   }
 }
 

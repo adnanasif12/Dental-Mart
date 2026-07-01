@@ -5,6 +5,8 @@
 
 import API_BASE_URL from './config.js';
 
+console.log('APIVendor: API_BASE_URL =', API_BASE_URL);
+
 class APIVendor {
   /**
    * Fetch all products from backend
@@ -19,6 +21,7 @@ class APIVendor {
     let lastError;
     for (const url of targets) {
       try {
+        console.log('APIVendor: fetching products from', url);
         const response = await fetch(url, {
           method: 'GET',
         });
