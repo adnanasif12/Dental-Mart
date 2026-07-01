@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
-import Product from '@/models/Product';
 import { getProducts, saveProductList } from './store';
 
 const CORS_HEADERS = {
@@ -15,61 +13,17 @@ export async function OPTIONS(request) {
 
 export async function GET(request) {
   try {
-    // Try MongoDB first
-    if (process.env.MONGODB_URI) {
-      try {
-        await dbConnect();
-        const products = await Product.find({}).sort({ createdAt: -1 });
-        
-        if (products.length === 0) {
-          // Seed initial products if empty
-          const initialProducts = getProducts();
-          if (initialProducts.length > 0) {
-            await Product.insertMany(initialProducts);
-            return NextResponse.json(
-              {
-                success: true,
-                data: initialProducts,
-                message: "Products fetched successfully"
-              },
-              { status: 200, headers: CORS_HEADERS }
-            );
-          }
-        }
-        
-        return NextResponse.json(
-          {
-            success: true,
-            data: products,
-            message: "Products fetched successfully"
-          },
-          { status: 200, headers: CORS_HEADERS }
-        );
-      } catch (mongoError) {
-        console.log('MongoDB query failed, falling back to file storage:', mongoError.message);
-        // Fallback to file storage
-        const products = getProducts();
-        return NextResponse.json(
-          {
-            success: true,
-            data: products,
-            message: "Products fetched successfully"
-          },
-          { status: 200, headers: CORS_HEADERS }
-        );
-      }
-    } else {
-      // No MongoDB URI, use file storage
-      const products = getProducts();
-      return NextResponse.json(
-        {
-          success: true,
-          data: products,
-          message: "Products fetched successfully"
-        },
-        { status: 200, headers: CORS_HEADERS }
-      );
-    }
+    // Use file storage (primary method)
+    const products = getProducts();
+    
+    return NextResponse.json(
+      {
+        success: true,
+        data: products,
+        message: "Products fetched successfully"
+      },
+      { status: 200, headers: CORS_HEADERS }
+    );
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json(
@@ -97,7 +51,43 @@ export async function POST(request) {
       );
     }
 
-    // Try MongoDB first
+    // Use file storage
+    const products = getProducts();
+    const nextId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+    
+    const newProduct = {
+      id: nextId,
+      name: body.name,
+      price: parseFloat(body.price),
+      image: body.image || "https://via.placeholder.com/200?text=Product",
+      rating: parseFloat(body.rating) || 4.0,
+      category: body.category || "tools",
+      description: body.description || ""
+    };
+    
+    products.push(newProduct);
+    saveProductList(products);
+    
+    return NextResponse.json(
+      {
+        success: true,
+        data: newProduct,
+        message: "Product created successfully"
+      },
+      { status: 201, headers: CORS_HEADERS }
+    );
+  } catch (error) {
+    console.error('Error creating product:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Error creating product",
+        error: error.message
+      },
+      { status: 500, headers: CORS_HEADERS }
+    );
+  }
+}
     if (process.env.MONGODB_URI) {
       try {
         await dbConnect();
