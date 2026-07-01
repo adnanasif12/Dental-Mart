@@ -1,15 +1,18 @@
-import { useState } from "react";
-import { cartItems } from "../data/products";
 import { CartIcons } from "../data/icons";
 
-function formatPrice(n) {
-  return "৳" + n.toLocaleString("en-IN");
+function formatPrice(value) {
+  const amount = Number(value);
+  return "৳" + (Number.isFinite(amount) ? amount : 0).toLocaleString("en-IN");
 }
 
 export default function CartPage({ cartItems, onRemoveItem, onQtyChange, onContinue }) {
-  const totalItems = cartItems.reduce((a, item) => a + item.qty, 0);
-  const subtotal = cartItems.reduce((s, item) => s + item.price * item.qty, 0);
-  const discount = Math.round(subtotal * 0.1);
+  const totalItems = cartItems.reduce((a, item) => a + (Number(item.qty) || 0), 0);
+  const subtotal = cartItems.reduce((s, item) => {
+    const price = Number(item.price) || 0;
+    const qty = Number(item.qty) || 0;
+    return s + price * qty;
+  }, 0);
+  const discount = subtotal > 0 ? Math.round(subtotal * 0.1) : 0;
   const total = subtotal - discount;
 
   return (
@@ -53,7 +56,7 @@ export default function CartPage({ cartItems, onRemoveItem, onQtyChange, onConti
 
                 <div className="cart-row__price">
                   <div className="cart-row__price-main">
-                    {formatPrice(item.price * item.qty)}
+                    {formatPrice((Number(item.price) || 0) * (Number(item.qty) || 0))}
                   </div>
                 </div>
               </div>

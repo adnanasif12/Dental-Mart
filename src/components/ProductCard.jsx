@@ -115,13 +115,13 @@ export default function ProductCard({ product, onAddToCart, onBuyNow }) {
         <div className="product-card__action-group">
           <button
             className="btn-add-cart"
-            onClick={(e) => { e.stopPropagation(); onAddToCart(); }}
+            onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
           >
             Add to Cart
           </button>
           <button
             className="btn-buy-now"
-            onClick={(e) => { e.stopPropagation(); onBuyNow(); }}
+            onClick={(e) => { e.stopPropagation(); onBuyNow(product); }}
           >
             Buy Now
           </button>
