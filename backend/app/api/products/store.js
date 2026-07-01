@@ -39,7 +39,18 @@ async function loadProducts() {
   if (process.env.MONGODB_URI) {
     try {
       await dbConnect();
-      const products = await Product.find({}).sort({ id: 1 }).lean();
+      let products = await Product.find({}).sort({ id: 1 }).lean();
+      
+      // If MongoDB is empty, seed it from file
+      if (!products || products.length === 0) {
+        console.log('MongoDB empty, seeding from file storage...');
+        const fileProducts = loadProductsFromFile();
+        if (fileProducts && fileProducts.length > 0) {
+          await Product.insertMany(fileProducts);
+          products = fileProducts;
+          console.log(`Seeded MongoDB with ${fileProducts.length} products`);
+        }
+      }
       
       if (products && products.length > 0) {
         productsCache = products;
@@ -47,7 +58,7 @@ async function loadProducts() {
         return products;
       }
     } catch (error) {
-      console.log('MongoDB load failed, trying file storage:', error.message);
+      console.log('MongoDB operation failed, trying file storage:', error.message);
     }
   }
 
