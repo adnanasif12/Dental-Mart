@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getProducts, saveProductList } from './store';
 
+const DEFAULT_PRODUCT_IMAGE = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" rx="24" fill="%23f3f4f6"/><rect x="40" y="40" width="320" height="320" rx="20" fill="%23ffffff" stroke="%23d1d5db" stroke-width="4"/><path d="M130 280h140" stroke="%234b5563" stroke-width="12" stroke-linecap="round"/><path d="M160 210h80" stroke="%234b5563" stroke-width="12" stroke-linecap="round"/><path d="M180 150h40" stroke="%234b5563" stroke-width="12" stroke-linecap="round"/></svg>';
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -59,7 +60,7 @@ export async function POST(request) {
       id: nextId,
       name: body.name,
       price: parseFloat(body.price),
-      image: body.image || "https://via.placeholder.com/200?text=Product",
+      image: body.image || DEFAULT_PRODUCT_IMAGE,
       rating: parseFloat(body.rating) || 4.0,
       category: body.category || "tools",
       description: body.description || ""

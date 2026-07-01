@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const FALLBACK_MONGODB_URI = 'mongodb+srv://ashibadnan42_db_user:AbrahaM79AshiB@cluster0.yymesmj.mongodb.net/?appName=Cluster0';
+const MONGODB_URI = process.env.MONGODB_URI || FALLBACK_MONGODB_URI;
 
 /**
  * Global is used here to maintain a cached connection across hot reloads
