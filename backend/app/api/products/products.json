@@ -25,5 +25,158 @@
     "rating": 4.3,
     "category": "tools",
     "description": "Stainless steel dental mirror"
+  },
+  {
+    "id": 4,
+    "name": "Dental Chair",
+    "price": 450000,
+    "image": "https://via.placeholder.com/200?text=Dental+Chair",
+    "rating": 4.7,
+    "category": "equipment",
+    "description": "Ergonomic dental treatment chair"
+  },
+  {
+    "id": 5,
+    "name": "Scaling Set",
+    "price": 3500,
+    "image": "https://via.placeholder.com/200?text=Scaling+Set",
+    "rating": 4.4,
+    "category": "tools",
+    "description": "Professional scaling instruments"
+  },
+  {
+    "id": 6,
+    "name": "Surgical Suction",
+    "price": 15000,
+    "image": "https://via.placeholder.com/200?text=Suction",
+    "rating": 4.6,
+    "category": "equipment",
+    "description": "Portable dental suction machine"
+  },
+  {
+    "id": 7,
+    "name": "Autoclave Sterilizer",
+    "price": 85000,
+    "image": "https://via.placeholder.com/200?text=Autoclave",
+    "rating": 4.8,
+    "category": "equipment",
+    "description": "High-pressure steam sterilizer"
+  },
+  {
+    "id": 8,
+    "name": "Handpiece Set",
+    "price": 35000,
+    "image": "https://via.placeholder.com/200?text=Handpiece",
+    "rating": 4.5,
+    "category": "tools",
+    "description": "High-speed and low-speed handpieces"
+  },
+  {
+    "id": 9,
+    "name": "Lighting System",
+    "price": 22000,
+    "image": "https://via.placeholder.com/200?text=Light+System",
+    "rating": 4.4,
+    "category": "equipment",
+    "description": "LED dental operating light"
+  },
+  {
+    "id": 10,
+    "name": "Composite Filling Kit",
+    "price": 2800,
+    "image": "https://via.placeholder.com/200?text=Composite+Kit",
+    "rating": 4.3,
+    "category": "cosmetic",
+    "description": "Complete composite restoration kit"
+  },
+  {
+    "id": 11,
+    "name": "X-Ray System",
+    "price": 180000,
+    "image": "https://via.placeholder.com/200?text=X-Ray+System",
+    "rating": 4.7,
+    "category": "equipment",
+    "description": "Digital intraoral X-ray system"
+  },
+  {
+    "id": 12,
+    "name": "Ultrasonic Scaler",
+    "price": 8900,
+    "image": "https://via.placeholder.com/200?text=Ultrasonic",
+    "rating": 4.6,
+    "category": "tools",
+    "description": "Piezo ultrasonic scaling device"
+  },
+  {
+    "id": 13,
+    "name": "Dental Binocular",
+    "price": 45000,
+    "image": "https://via.placeholder.com/200?text=Binocular",
+    "rating": 4.5,
+    "category": "equipment",
+    "description": "Magnification binocular lens system"
+  },
+  {
+    "id": 14,
+    "name": "Impression Material",
+    "price": 1200,
+    "image": "https://via.placeholder.com/200?text=Impression",
+    "rating": 4.2,
+    "category": "supplies",
+    "description": "Premium impression compound"
+  },
+  {
+    "id": 15,
+    "name": "Endodontic Kit",
+    "price": 12000,
+    "image": "https://via.placeholder.com/200?text=Endo+Kit",
+    "rating": 4.4,
+    "category": "tools",
+    "description": "Complete root canal treatment kit"
+  },
+  {
+    "id": 16,
+    "name": "Orthodontic Pliers",
+    "price": 5600,
+    "image": "https://via.placeholder.com/200?text=Orthodontic",
+    "rating": 4.3,
+    "category": "tools",
+    "description": "Precision orthodontic instruments"
+  },
+  {
+    "id": 17,
+    "name": "Digital Scale",
+    "price": 18000,
+    "image": "https://via.placeholder.com/200?text=Digital+Scale",
+    "rating": 4.5,
+    "category": "equipment",
+    "description": "Precision electronic weighing scale"
+  },
+  {
+    "id": 18,
+    "name": "Mouth Mirror Holder",
+    "price": 800,
+    "image": "https://via.placeholder.com/200?text=Mirror+Holder",
+    "rating": 4.1,
+    "category": "accessories",
+    "description": "Adjustable instrument holder"
+  },
+  {
+    "id": 19,
+    "name": "Dental Bib Dispenser",
+    "price": 2500,
+    "image": "https://via.placeholder.com/200?text=Bib+Dispenser",
+    "rating": 4.2,
+    "category": "accessories",
+    "description": "Wall-mounted bib dispenser"
+  },
+  {
+    "id": 20,
+    "name": "Air Compressor",
+    "price": 65000,
+    "image": "https://via.placeholder.com/200?text=Air+Compressor",
+    "rating": 4.6,
+    "category": "equipment",
+    "description": "Oil-free dental air compressor"
   }
 ]

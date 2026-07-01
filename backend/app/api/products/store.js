@@ -5,8 +5,15 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const bundlePath = path.join(__dirname, 'products.json');
-const tmpPath = path.join(os.tmpdir(), 'dentalmart-products.json');
+
+// For serverless (Vercel), use the bundled products.json as source of truth
+// For local development, prefer tmp directory but fallback to bundled
+const bundledProductsPath = path.join(__dirname, 'products.json');
+const isServerless = !fs.existsSync(path.join(__dirname, '../../..', 'node_modules'));
+
+// In-memory cache to handle serverless cold starts
+let productsCache = null;
+let cacheLoadedFromFile = false;
 
 function ensureDirExists(filePath) {
   const dir = path.dirname(filePath);
@@ -15,47 +22,71 @@ function ensureDirExists(filePath) {
   }
 }
 
+function loadProductsFromFile() {
+  try {
+    // Always try bundled products first (source of truth)
+    if (fs.existsSync(bundledProductsPath)) {
+      const raw = fs.readFileSync(bundledProductsPath, 'utf-8');
+      return JSON.parse(raw);
+    }
+  } catch (error) {
+    console.error('Error loading from bundled products:', error.message);
+  }
+  
+  return [];
+}
+
 function getDataPath() {
+  // For serverless, always use bundled path
+  if (isServerless) {
+    return bundledProductsPath;
+  }
+
+  // For local, try tmp first, then bundled
+  const tmpPath = path.join(os.tmpdir(), 'dentalmart-products.json');
+  
   if (fs.existsSync(tmpPath)) {
     return tmpPath;
   }
 
-  if (fs.existsSync(bundlePath)) {
-    try {
-      ensureDirExists(tmpPath);
-      fs.copyFileSync(bundlePath, tmpPath);
-      return tmpPath;
-    } catch (error) {
-      return bundlePath;
-    }
-  }
-
-  try {
-    ensureDirExists(tmpPath);
-    fs.writeFileSync(tmpPath, '[]', 'utf-8');
-    return tmpPath;
-  } catch (error) {
-    return bundlePath;
-  }
+  return bundledProductsPath;
 }
 
 const dataPath = getDataPath();
 
 function loadProducts() {
+  // Use in-memory cache on serverless for performance
+  if (isServerless && cacheLoadedFromFile) {
+    return productsCache || [];
+  }
+
   try {
     const raw = fs.readFileSync(dataPath, 'utf-8');
-    return JSON.parse(raw);
+    const products = JSON.parse(raw);
+    
+    // Cache it
+    productsCache = products;
+    cacheLoadedFromFile = true;
+    
+    return products;
   } catch (error) {
+    console.error('Error loading products:', error.message);
     return [];
   }
 }
 
 function saveProducts(products) {
   try {
+    // Update in-memory cache
+    productsCache = products;
+
+    // Try to save to file (may fail on serverless, but that's ok)
     ensureDirExists(dataPath);
     fs.writeFileSync(dataPath, JSON.stringify(products, null, 2), 'utf-8');
   } catch (error) {
-    // ignore write errors in read-only environments
+    // On serverless, file writes may fail - that's expected
+    // Data is persisted in memory for the duration of the invocation
+    console.warn('Could not persist products to file:', error.message);
   }
 }
 
