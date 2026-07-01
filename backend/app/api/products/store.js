@@ -59,7 +59,7 @@ async function loadProducts() {
   console.log('=== loadProducts called ===');
   console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI);
   
-  // Try MongoDB first if available
+  // Try MongoDB first if available - NO AUTO-SEEDING
   if (process.env.MONGODB_URI) {
     try {
       console.log('Connecting to MongoDB...');
@@ -69,59 +69,23 @@ async function loadProducts() {
       let products = await Product.find({}).sort({ id: 1 }).lean();
       console.log('Found products in MongoDB:', products?.length || 0);
       
-      // If MongoDB has less than 5 products, seed it from file (force reseed)
-      if (!products || products.length < 5) {
-        console.log(`MongoDB has only ${products?.length || 0} products. Merging with file storage...`);
-        const fileProducts = loadProductsFromFile();
-        console.log('Loaded from file:', fileProducts?.length || 0, 'products');
-        
-        if (fileProducts && fileProducts.length > 0) {
-          // Get existing product IDs to avoid duplicates
-          const existingIds = new Set(products?.map(p => p.id) || []);
-          
-          // Filter file products - only insert those not already in MongoDB
-          const newProducts = fileProducts.filter(fp => !existingIds.has(fp.id));
-          console.log('New products to insert:', newProducts.length, 'Existing:', existingIds.size);
-          
-          if (newProducts.length > 0) {
-            await Product.insertMany(newProducts);
-            console.log('Inserted', newProducts.length, 'new products into MongoDB');
-          }
-          
-          // Reload all products after potential insertion
-          products = await Product.find({}).sort({ id: 1 }).lean();
-          console.log('Total products after merge:', products.length);
-        }
-      }
-      
       if (products && products.length > 0) {
         console.log('Returning', products.length, 'products from MongoDB');
         productsCache = products;
         cacheLoaded = true;
         return products;
+      } else {
+        console.log('MongoDB is empty - no auto-seeding, returning empty array');
+        return [];
       }
     } catch (error) {
       console.error('MongoDB operation failed:', error.message, error.stack);
+      return [];
     }
   }
 
-  console.log('Falling back to file storage...');
-  // Fallback to file storage
-  if (cacheLoaded && productsCache) {
-    console.log('Returning', productsCache.length, 'products from cache');
-    return productsCache;
-  }
-
-  try {
-    const raw = fs.readFileSync(productsFilePath, 'utf-8');
-    productsCache = JSON.parse(raw);
-    cacheLoaded = true;
-    console.log('Loaded', productsCache.length, 'products from file fallback');
-    return productsCache;
-  } catch (error) {
-    console.error('Error loading products from file fallback:', error.message);
-    return [];
-  }
+  console.log('No MONGODB_URI configured');
+  return [];
 }
 
 function saveProductsToFile(products) {
