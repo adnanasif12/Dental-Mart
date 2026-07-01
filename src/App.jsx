@@ -17,14 +17,32 @@ import TodaysDeals    from "./components/TodaysDeals";
 
 export default function App() {
   const [page, setPage] = useState("shop"); // "shop" | "cart"
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = window.localStorage.getItem("dentalmart_cartItems");
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      console.warn("Failed to load cart from localStorage:", error);
+      return [];
+    }
+  });
   const [cartCount, setCartCount] = useState(0);
 
   const goShop = () => setPage("shop");
   const goCart = () => setPage("cart");
 
   useEffect(() => {
-    setCartCount(cartItems.reduce((sum, item) => sum + item.qty, 0));
+    setCartCount(cartItems.reduce((sum, item) => sum + (Number(item.qty) || 0), 0));
+  }, [cartItems]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem("dentalmart_cartItems", JSON.stringify(cartItems));
+    } catch (error) {
+      console.warn("Failed to save cart to localStorage:", error);
+    }
   }, [cartItems]);
 
   const handleAddToCart = (product) => {

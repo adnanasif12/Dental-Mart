@@ -112,10 +112,21 @@ export default function CreateProduct() {
             <div className={styles.formGroup}>
               <label>Category *</label>
               <select name="category" value={formData.category} onChange={handleChange}>
-                <option value="tools">Tools</option>
-                <option value="cosmetic">Cosmetic</option>
-                <option value="equipment">Equipment</option>
-                <option value="supplies">Supplies</option>
+                <option value="Disposables">Disposables</option>
+                <option value="cleaning & Sterilization">Cleaning & Sterilization</option>
+                <option value="protective & Hygiene">Protective & Hygiene</option>
+                <option value="Basic clinic instruments">Basic Clinic Instruments</option>
+                <option value="Mixing Items">Mixing Items</option>
+                <option value="Bur Instruments">Bur Instruments</option>
+                <option value="Patient Care">Patient Care</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Rotary">Rotary</option>
+                <option value="Clinic Utility">Clinic Utility</option>
+                <option value="Consumables Materials">Consumables Materials</option>
+                <option value="Packaging">Packaging</option>
+                <option value="Storage">Storage</option>
+                <option value="Major Equipment">Major Equipment</option>
+
               </select>
             </div>
           </div>
