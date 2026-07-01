@@ -14,7 +14,7 @@ export async function OPTIONS(request) {
 export async function GET(request) {
   try {
     // Use file storage (primary method)
-    const products = getProducts();
+    const products = await getProducts();
     
     return NextResponse.json(
       {
@@ -52,7 +52,7 @@ export async function POST(request) {
     }
 
     // Use file storage
-    const products = getProducts();
+    const products = await getProducts();
     const nextId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
     
     const newProduct = {
@@ -66,7 +66,7 @@ export async function POST(request) {
     };
     
     products.push(newProduct);
-    saveProductList(products);
+    await saveProductList(products);
     
     return NextResponse.json(
       {

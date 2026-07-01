@@ -15,7 +15,7 @@ export async function OPTIONS(request) {
 export async function GET(request, { params }) {
   try {
     const { id } = params;
-    const products = getProducts();
+    const products = await getProducts();
     const product = products.find(p => p.id === parseInt(id));
 
     if (!product) {
@@ -53,7 +53,7 @@ export async function PUT(request, { params }) {
   try {
     const { id } = params;
     const body = await request.json();
-    const products = getProducts();
+    const products = await getProducts();
     const productIndex = products.findIndex(p => p.id === parseInt(id));
 
     if (productIndex === -1) {
@@ -77,7 +77,7 @@ export async function PUT(request, { params }) {
       description: body.description || products[productIndex].description
     };
 
-    saveProductList(products);
+    await saveProductList(products);
 
     return NextResponse.json(
       {
@@ -103,7 +103,7 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     const { id } = params;
-    let products = getProducts();
+    let products = await getProducts();
     const productIndex = products.findIndex(p => p.id === parseInt(id));
 
     if (productIndex === -1) {
@@ -118,7 +118,7 @@ export async function DELETE(request, { params }) {
 
     const deletedProduct = products[productIndex];
     products = products.filter((_, index) => index !== productIndex);
-    saveProductList(products);
+    await saveProductList(products);
 
     return NextResponse.json(
       {

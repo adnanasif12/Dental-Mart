@@ -1,11 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dbConnect from '@/lib/mongodb';
+import Product from '@/app/models/Product';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Always use the bundled products.json as the persistent storage
+// File storage as fallback
 const productsFilePath = path.join(__dirname, 'products.json');
 
 // In-memory cache for performance
@@ -32,8 +34,24 @@ function loadProductsFromFile() {
   return [];
 }
 
-function loadProducts() {
-  // Return cached data if already loaded
+async function loadProducts() {
+  // Try MongoDB first if available
+  if (process.env.MONGODB_URI) {
+    try {
+      await dbConnect();
+      const products = await Product.find({}).sort({ id: 1 }).lean();
+      
+      if (products && products.length > 0) {
+        productsCache = products;
+        cacheLoaded = true;
+        return products;
+      }
+    } catch (error) {
+      console.log('MongoDB load failed, trying file storage:', error.message);
+    }
+  }
+
+  // Fallback to file storage
   if (cacheLoaded && productsCache) {
     return productsCache;
   }
@@ -44,39 +62,52 @@ function loadProducts() {
     cacheLoaded = true;
     return productsCache;
   } catch (error) {
-    console.error('Error loading products:', error.message);
-    // Return empty array if file doesn't exist or is invalid
+    console.error('Error loading products from file:', error.message);
     return [];
   }
 }
 
-function saveProducts(products) {
+function saveProductsToFile(products) {
   try {
-    // Ensure directory exists
     ensureDirExists(productsFilePath);
-    
-    // Write to file
     fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2), 'utf-8');
-    
-    // Update cache
-    productsCache = products;
-    cacheLoaded = true;
-    
-    console.log('Products saved successfully');
+    console.log('Products saved to file successfully');
   } catch (error) {
-    console.error('Error saving products:', error.message);
-    // Still update cache even if file write fails
-    productsCache = products;
-    cacheLoaded = true;
+    console.error('Error saving products to file:', error.message);
   }
 }
 
-export function getProducts() {
-  return loadProducts();
+async function saveProducts(products) {
+  // Update cache
+  productsCache = products;
+  cacheLoaded = true;
+
+  // Try MongoDB first if available
+  if (process.env.MONGODB_URI) {
+    try {
+      await dbConnect();
+      
+      // Delete all existing products and insert new ones
+      await Product.deleteMany({});
+      await Product.insertMany(products);
+      
+      console.log('Products saved to MongoDB successfully');
+      return;
+    } catch (error) {
+      console.log('MongoDB save failed, falling back to file storage:', error.message);
+    }
+  }
+
+  // Fallback to file storage
+  saveProductsToFile(products);
 }
 
-export function saveProductList(products) {
-  saveProducts(products);
+export async function getProducts() {
+  return await loadProducts();
+}
+
+export async function saveProductList(products) {
+  await saveProducts(products);
 }
 
 export function getNextProductId(products) {
