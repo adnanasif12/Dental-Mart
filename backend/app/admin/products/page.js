@@ -133,7 +133,8 @@ export default function ProductsList() {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
