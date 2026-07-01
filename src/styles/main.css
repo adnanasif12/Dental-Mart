@@ -375,8 +375,23 @@ a {
 /* ─── PRODUCT GRID ──────────────────────────────────────────── */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
+  margin-bottom: 20px;
+}
+
+.product-grid-info {
+  text-align: center;
+  color: #666;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.product-grid-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 16px;
 }
 
 /* ─── PRODUCT CARD ──────────────────────────────────────────── */
@@ -613,13 +628,24 @@ a {
   background: white;
   color: #0f1111;
   font-family: inherit;
+  transition: all 0.15s;
 }
-.pagination__btn:hover { background: #f7f7f7; }
+.pagination__btn:hover:not(:disabled) { background: #f7f7f7; }
 .pagination__btn--active {
   background: #fff3e0;
   border-color: #ff9900;
   font-weight: 700;
   color: #c7511f;
+}
+.pagination__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f7f7f7;
+  color: #ccc;
+}
+.pagination__ellipsis {
+  padding: 0 4px;
+  color: #999;
 }
 
 /* ─── BEST SELLERS ──────────────────────────────────────────── */
