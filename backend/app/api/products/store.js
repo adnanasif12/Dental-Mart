@@ -71,18 +71,26 @@ async function loadProducts() {
       
       // If MongoDB has less than 5 products, seed it from file (force reseed)
       if (!products || products.length < 5) {
-        console.log(`MongoDB has only ${products?.length || 0} products. Force-seeding from file storage...`);
+        console.log(`MongoDB has only ${products?.length || 0} products. Merging with file storage...`);
         const fileProducts = loadProductsFromFile();
         console.log('Loaded from file:', fileProducts?.length || 0, 'products');
         
         if (fileProducts && fileProducts.length > 0) {
-          // Clear existing and insert all
-          await Product.deleteMany({});
-          console.log('Cleared MongoDB');
+          // Get existing product IDs to avoid duplicates
+          const existingIds = new Set(products?.map(p => p.id) || []);
           
-          await Product.insertMany(fileProducts);
-          console.log('Inserted', fileProducts.length, 'products into MongoDB');
-          products = fileProducts;
+          // Filter file products - only insert those not already in MongoDB
+          const newProducts = fileProducts.filter(fp => !existingIds.has(fp.id));
+          console.log('New products to insert:', newProducts.length, 'Existing:', existingIds.size);
+          
+          if (newProducts.length > 0) {
+            await Product.insertMany(newProducts);
+            console.log('Inserted', newProducts.length, 'new products into MongoDB');
+          }
+          
+          // Reload all products after potential insertion
+          products = await Product.find({}).sort({ id: 1 }).lean();
+          console.log('Total products after merge:', products.length);
         }
       }
       
