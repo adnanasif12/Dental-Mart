@@ -41,14 +41,16 @@ async function loadProducts() {
       await dbConnect();
       let products = await Product.find({}).sort({ id: 1 }).lean();
       
-      // If MongoDB is empty, seed it from file
-      if (!products || products.length === 0) {
-        console.log('MongoDB empty, seeding from file storage...');
+      // If MongoDB has less than 5 products, seed it from file (force reseed)
+      if (!products || products.length < 5) {
+        console.log(`MongoDB has only ${products?.length || 0} products. Seeding from file storage...`);
         const fileProducts = loadProductsFromFile();
         if (fileProducts && fileProducts.length > 0) {
+          // Clear existing and insert all
+          await Product.deleteMany({});
           await Product.insertMany(fileProducts);
           products = fileProducts;
-          console.log(`Seeded MongoDB with ${fileProducts.length} products`);
+          console.log(`Force-seeded MongoDB with ${fileProducts.length} products`);
         }
       }
       
