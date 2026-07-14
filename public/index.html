@@ -3,20 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <script>
-      try {
-        if (typeof window !== 'undefined') {
-          const descriptor = Object.getOwnPropertyDescriptor(window, 'ethereum');
-          if (!descriptor) {
-            Object.defineProperty(window, 'ethereum', {
-              configurable: true,
-              writable: true,
-              value: undefined,
-            });
+      const origDefine = Object.defineProperty;
+      Object.defineProperty = function(obj, prop, desc) {
+        if (obj === window && prop === 'ethereum') {
+          try {
+            return origDefine(obj, prop, desc);
+          } catch (e) {
+            console.warn('Ethereum redefine blocked:', e.message);
+            return obj;
           }
         }
-      } catch (error) {
-        console.warn('Ethereum guard setup failed:', error);
-      }
+        return origDefine(obj, prop, desc);
+      };
     </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
