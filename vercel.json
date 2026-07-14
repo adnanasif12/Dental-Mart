@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "rootDirectory": "backend",
   "installCommand": "npm install",
-  "buildCommand": "npm run build",
+  "buildCommand": "npm --prefix backend run build",
   "builds": [
     {
-      "src": "package.json",
+      "src": "backend/package.json",
       "use": "@vercel/next"
     }
   ]
